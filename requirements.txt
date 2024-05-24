@@ -1,0 +1,6 @@
+matplotlib
+uvicorn
+numpy
+pillow
+fastapi
+Jinja2
