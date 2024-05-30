@@ -14,13 +14,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
-def change_brightness(image, factor):
+def change_brightness(image, percent):
 
-    brightened_image = image + factor
-    brightened_image = np.clip(brightened_image, 0, 1)
 
-    return brightened_image
+    darken_factor = 1 - percent / 100
+    darkened_image = np.clip(image * darken_factor, 0, 255).astype(np.uint8)
 
+    return darkened_image
 
 
 def plot_color_distribution(image_array, title):
@@ -53,7 +53,7 @@ async def process_image(
 
 
     original_image = Image.fromarray(image_array)
-    original_image_path = os.path.join("static", "original_image.png")
+    original_image_path = os.path.join("static", "original_image.jpg")
     original_image.save(original_image_path)
     print(f"Сохранено изображение: {original_image_path}")
 
@@ -62,7 +62,7 @@ async def process_image(
 
     return templates.TemplateResponse("result.html", {
         "request": request,
-        "original_image": "/static/original_image.png",
+        "original_image": "/static/original_image.jpg",
         "original_color_distribution": original_color_distribution,
     })
 
