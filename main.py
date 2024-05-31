@@ -24,11 +24,21 @@ def change_brightness(image, percent):
 
 
 def plot_color_distribution(image_array, title):
-    fig, ax = plt.subplots(figsize=(8, 6))
-    ax.hist(image_array.flatten(), bins=256, range=(0, 256), color='b')
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Разделяем изображение на каналы R, G, B
+    r, g, b = image_array[:, :, 0], image_array[:, :, 1], image_array[:, :, 2]
+
+    # Рисуем гистограммы для каждого канала
+    ax.hist(r.flatten(), bins=256, range=(0, 256), color='r', alpha=0.5, label='Red')
+    ax.hist(g.flatten(), bins=256, range=(0, 256), color='g', alpha=0.5, label='Green')
+    ax.hist(b.flatten(), bins=256, range=(0, 256), color='b', alpha=0.5, label='Blue')
+
     ax.set_title(title)
     ax.set_xlabel('Значение пикселя')
     ax.set_ylabel('Количество пикселей')
+    ax.legend()
+
     buffer = BytesIO()
     plt.savefig(buffer, format='png')
     buffer.seek(0)
